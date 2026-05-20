@@ -5,6 +5,7 @@ function App() {
 
   const [data,setData] = useState([]);
   const [search,setSearch] = useState("");
+  let [filterData, setFilterData] = useState([])
 
 
   useEffect(()=>{
@@ -17,13 +18,15 @@ function App() {
 
   useEffect(()=>{
     console.log(search);
+    setFilterData(data.filter((user)=> user.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())));
+    console.log(filterData)
   },[search])
 
   return (
     <div>
       <input type="text" value={search} onChange={e => {setSearch(e.target.value)}} />
       <div>
-        {data.map((item)=>{
+        {(search ? filterData :data).map((item)=>{
           return <p key={item.id}>{item.name}</p>
         })}
       </div>
