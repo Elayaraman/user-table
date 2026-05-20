@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 function App() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
+  const [debouncedSearch,setDebouncedSearch]= useState("");
   const [sort, setSort] = useState("asc");
 
   useEffect(() => {
@@ -16,12 +17,20 @@ function App() {
   }, []);
 
   const filteredData = data
-    .filter((user) => user.name.toLowerCase().includes(search.toLowerCase()))
+    .filter((user) => user.name.toLowerCase().includes(debouncedSearch.toLowerCase()))
     .sort((a, b) => {
       return sort === "asc"
         ? a.name.localeCompare(b.name)
         : b.name.localeCompare(a.name);
     });
+
+    useEffect(()=>{
+      const timer = setTimeout(()=>{
+        console.log(search)
+        setDebouncedSearch(search)
+      },300);
+      return ()=> clearTimeout(timer);
+    },[search])
 
   return (
     <div>
